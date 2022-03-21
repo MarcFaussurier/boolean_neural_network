@@ -23,7 +23,7 @@ And some disavdagantes :
 
 ### About FPGA
 
-This projet also come with an FPGA prototype built in logism (.circ). Current implementation is desgined as a 2D array of a cell that performs both routing and boolean operations. Cells are desgined to be chainable, thus not having identifier, and thus exandable with other circuits. The final goal is to build a dynamycally exandable waffer-sized FPGA chip that could host a neural network trained to reshap itself by reshaping other neural networks.
+This projet also come with an FPGA prototype built in logism (.circ). Current implementation is desgined as a 2D array of a cell that performs both routing and boolean operations. Cells are desgined to be chainable, thus not having identifier, and thus exandable with other circuits. The final goal is to build a dynamycally exandable waffer-sized FPGA chip that could host a neural network trained to reshap other neural networks (and thus, itself).
 
 ### Current application project
 
