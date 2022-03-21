@@ -8,7 +8,8 @@ Boolean neural networks proviode some advantages :
 -  boolean neural networks can be paralelized, simulated and trained at zero cost using FPGA and custom ICs; also this totally remove the wall between AI and hardware.
 - genetic evolution fits well within 4-bits logical functions cells
 - this provides a nice user-friendly hexadecimal representation of the network, also as boolean algebra still aply, QMC and other optimisation algos still apply
-And some disavdagantes:
+
+And some disavdagantes :
 - training seems slower
 - require an appropriate initial neural network shape
 
