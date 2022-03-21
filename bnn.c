@@ -25,7 +25,7 @@ typedef struct 		s_bgraph
 {
 	char			*label;
 	struct s_bgraph	*inputs[2];
-	t_bin			f[4];
+	t_bin			f[4]; /* because there is only 16 truth tables*/
 }					t_bgraph;
 
 typedef struct		s_bnn
@@ -258,6 +258,8 @@ int 				main(int ac, char **av)
 		}
 	}
 	/**
+		FULL ADDER TRUTH TABLE:
+		
 		000	00
 		001	10
 		010	10
