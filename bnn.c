@@ -25,9 +25,9 @@ typedef struct 		s_bgraph
 {
 	char			*label;
 	struct s_bgraph	*inputs[2];
-	t_bin			f[4]; /* because there is only 16 truth tables*/
+	t_bin			f[4];
 }					t_bgraph;
-
+// this is a chromosome
 typedef struct		s_bnn
 {
 	t_bgraph		inputs[INPUTS_MAX];
@@ -85,11 +85,12 @@ t_bin				dogop(t_bgraph *cell)
 	return (doop(cell->f, dogop(cell->inputs[0]), dogop(cell->inputs[1])));
 }
 
-void				bnn_run(t_bnn bnn, char *s)
+t_bin				bnn_run(t_bnn bnn, char *s, char *output)
 {
 	size_t	i;
 	t_bin	r;
 
+	printf("bnn_run(%s)\n", s);
 	i = 0;
 	while (s[i])
 	{
@@ -99,10 +100,14 @@ void				bnn_run(t_bnn bnn, char *s)
 	i = 0;
 	while (i < bnn.output_count)
 	{
-		r = dogop( find_cell(bnn.outputs[i], bnn) ); 
-		printf("%s = %c\n", bnn.outputs[i], r);
+		if (!strcmp(bnn.outputs[i], output))
+		{
+			return dogop( find_cell(bnn.outputs[i], bnn) ); 
+		}
 		i += 1;
 	}
+	printf("error - unable to find output label %s\n", output);
+	return 0;
 }
 
 void				bnn_mutate(t_bnn *bnn)
@@ -117,40 +122,34 @@ void				bnn_mutate(t_bnn *bnn)
 	bnn->cells[cell].f[bit] = bnn->cells[cell].f[bit] == '0' ? '1' : '0';
 }
 
-void				bnn_train(t_bnn *bnn, char *s, char *sr)
+void				bnn_write(char *path, t_bnn bnn)
 {
+	int	fd;
 	size_t	i;
-	t_bin	r;
 
-	printf("bnn generation#%zu\n", bnn->generation);
+	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	i = 0;
-	while (s[i])
+	while (i < bnn.input_count)
 	{
-		bnn->inputs[i].f[0] = s[i];
+		write(fd, bnn.inputs[i].label, strlen(bnn.inputs[i].label));
 		i += 1;
-	}
-	i = 0;
-	while (i < bnn->output_count)
-	{
-		r = dogop( find_cell(bnn->outputs[i], *bnn) ); 
-		if (r != *sr)
-		{
-			printf("(FAILURE) %s = %c\n", bnn->outputs[i], r);
-
-			bnn_mutate(bnn);
-			bnn_train(bnn, s, sr);
-
-			i = 0;
-
-			break;
-		}
+		if (i != bnn.input_count)	
+			write(fd, ", ", 2);
 		else
-		{
-			printf("(SUCCESS) %s = %c\n", bnn->outputs[i], r);
-		}
-		sr += 1;
+			write(fd, ".\n", 2);
 		i += 1;
 	}
+	i = 0;
+	while (i < bnn.cell_count)
+	{
+		write(fd, bnn.cells[i].label, strlen(bnn.cells[i].label));
+		write(fd, "\t= ", 3);
+		write(fd, bnn.cells[i].f, 4);
+		write(fd, "(", 1);
+		write(fd, ")\n", 2);
+		i += 1;
+	}
+	close(fd);
 }
 
 int 				main(int ac, char **av)
@@ -166,7 +165,7 @@ int 				main(int ac, char **av)
 	int				wait_output;
 	if (ac != 2)
 		return !!printf("usage: %s source.bnn\n", av[0]);
-#if DEBUG == 1
+#if DEBUG == 0
 	srand(time(0));
 #endif
 	fd = open(av[1], O_RDONLY);
@@ -258,8 +257,8 @@ int 				main(int ac, char **av)
 		}
 	}
 	/**
-		FULL ADDER TRUTH TABLE:
-		
+	 full adder truth table
+
 		000	00
 		001	10
 		010	10
@@ -269,19 +268,46 @@ int 				main(int ac, char **av)
 		110	01
 		111	11
 */
-	bnn_run(bnn, "011");
-
 	printf("training...\n");
-
-
-	bnn_train(&bnn, "001", "10");
-	bnn_train(&bnn, "000", "00");
-	bnn_train(&bnn, "001", "10");
-	bnn_train(&bnn, "000", "00");
-	bnn_train(&bnn, "001", "10");
-	//	bnn_train(bnn, "010", "10");
+	int	success;
+	t_bnn bnn2;
+	success = 0;
+	while (!success)
+	{
+		bnn.generation += 1;
+		printf("generation #%zu\n", bnn.generation);
+		bnn2 = bnn;
+		bnn_mutate(&bnn2);
+		success = 1;
+		//
+		if (bnn_run(bnn2, "110", "R1") != '0')
+			success = 0;
+		else
+		{
+			bnn = bnn2;
+			printf("--success 110->0\n");
+		}
+		//
+		if (bnn_run(bnn2, "111", "R1") != '1')
+			success = 0;
+		else
+		{
+			bnn = bnn2;
+			printf("--success 111->1\n");
+		}
+		//
+		if (bnn_run(bnn, "000", "R1") != '0')
+			success = 0;
+		else
+		{
+			bnn = bnn2;
+			printf("--success 000->0\n");
+		}
+	}
 
 	printf("testing...\n");
-	bnn_run(bnn, "001");
-	bnn_run(bnn, "000");
+	bnn_run(bnn, "111", "R1");
+	bnn_run(bnn, "000", "R1");
+
+	bnn_write("demo.trained.bnn", bnn);
 }
