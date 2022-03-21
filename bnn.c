@@ -277,32 +277,15 @@ int 				main(int ac, char **av)
 		bnn.generation += 1;
 		printf("generation #%zu\n", bnn.generation);
 		bnn2 = bnn;
+		// TODO: non-expressive genes + crossover
 		bnn_mutate(&bnn2);
 		success = 1;
-		//
 		if (bnn_run(bnn2, "110", "R1") != '0')
 			success = 0;
-		else
-		{
-			bnn = bnn2;
-			printf("--success 110->0\n");
-		}
-		//
 		if (bnn_run(bnn2, "111", "R1") != '1')
 			success = 0;
-		else
-		{
-			bnn = bnn2;
-			printf("--success 111->1\n");
-		}
-		//
 		if (bnn_run(bnn, "000", "R1") != '0')
 			success = 0;
-		else
-		{
-			bnn = bnn2;
-			printf("--success 000->0\n");
-		}
 	}
 
 	printf("testing...\n");

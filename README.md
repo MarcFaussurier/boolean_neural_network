@@ -3,11 +3,14 @@
 Boolean neural network are a set of boolean functions - 2 boolean inputs, 2 pow 4 = 16 possible logical doors per cells. 
 Classical terimnology of neural networks still apply, so that we have a set of inputs, some hidden layers and some outputs. 
 A demo representation of a boolean neural network can be found in [demo.bnn](/demo.bnn) file.
-ral networks proviode some advantages :
+
+Boolean neural networks proviode some advantages :
 -  boolean neural networks can be paralelized, simulated and trained at zero cost using FPGA and custom ICs; also this totally remove the wall between AI and hardware.
 - genetic evolution fits well within 4-bits logical functions cells
 - this provides a nice user-friendly hexadecimal representation of the network, also as boolean algebra still aply, QMC and other optimisation algos still apply
-
+And some disavdagantes:
+- training seems slower
+- require an appropriate initial neural network shape
 ### Training Algorithm
 
 - A population of random chromosomes (boolean functions) is choosen
