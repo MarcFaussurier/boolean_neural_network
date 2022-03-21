@@ -18,7 +18,7 @@ And some disavdagantes :
 - A population of random chromosomes (boolean functions) is choosen
 - For each chromosomes that fail a test
 	- A crossover point of two parents (including non-expressive genes) that succeded test are choosen randomly
-		- if zero succeded regenerate the population (it may take a while to find a suitable initial population for multi-output neural network)
+		- if zero succeded, regenerate the population (it may take a while to find a suitable initial population for multi-output neural network)
 	- A child is created usig the union of parents cross-over, it also contains non-expressive parent genes
 
 ### About FPGA
