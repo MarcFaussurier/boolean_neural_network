@@ -11,6 +11,7 @@ Boolean neural networks proviode some advantages :
 And some disavdagantes:
 - training seems slower
 - require an appropriate initial neural network shape
+
 ### Training Algorithm
 
 - A population of random chromosomes (boolean functions) is choosen
@@ -19,10 +20,9 @@ And some disavdagantes:
 		- if zero succeded regenerate the population (it may take a while to find a suitable initial population for multi-output neural network)
 	- A child is created usig the union of parents cross-over, it also contains non-expressive parent genes
 
-
 ### About FPGA
 
-This projet also come with an FPGA prototype built in logism (.circ). Current implementation is desgined as a 2D array of a cell that performs both routing and boolean operation. Cells are desgined to be chainable, thus not haing identifier, and thus exandable with other circuits. The final goal is to build a dynamycally exandable Waffer-sized FPGA chip that could host a neural network trained to reshap other neural networks.
+This projet also come with an FPGA prototype built in logism (.circ). Current implementation is desgined as a 2D array of a cell that performs both routing and boolean operations. Cells are desgined to be chainable, thus not having identifier, and thus exandable with other circuits. The final goal is to build a dynamycally exandable waffer-sized FPGA chip that could host a neural network trained to reshap other neural networks.
 
 ### Current application project
 
